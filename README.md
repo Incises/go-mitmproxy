@@ -25,7 +25,7 @@
 ### Installation
 
 ```bash
-go install github.com/lqqyt2423/go-mitmproxy/cmd/go-mitmproxy@latest
+go install github.com/Incises/go-mitmproxy/cmd/go-mitmproxy@latest
 ```
 
 ### Usage
