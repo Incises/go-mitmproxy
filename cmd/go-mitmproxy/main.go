@@ -87,7 +87,7 @@ func main() {
 		log.Infoln("UpstreamCert config false")
 	}
 
-	p.AddAddon(&proxy.LogAddon{})
+	p.AddAddon(&addon.LogAddon{})
 	p.AddAddon(web.NewWebAddon(config.WebAddr))
 
 	if config.MapRemote != "" {

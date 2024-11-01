@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Incises/go-mitmproxy/addon"
 	"github.com/Incises/go-mitmproxy/proxy"
 	log "github.com/sirupsen/logrus"
 )
@@ -52,7 +53,7 @@ func main() {
 	}
 
 	p.AddAddon(&CloseConn{})
-	p.AddAddon(&proxy.LogAddon{})
+	p.AddAddon(&addon.LogAddon{})
 
 	log.Fatal(p.Start())
 }
