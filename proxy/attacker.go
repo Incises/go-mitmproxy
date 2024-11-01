@@ -442,7 +442,7 @@ func (a *attacker) attack(res http.ResponseWriter, req *http.Request) {
 				logErr(log, err)
 			}
 		}
-		if response.Body != nil && len(response.Body) > 0 {
+		if len(response.Body) > 0 {
 			_, err := res.Write(response.Body)
 			if err != nil {
 				logErr(log, err)
