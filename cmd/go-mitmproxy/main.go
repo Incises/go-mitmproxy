@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/lqqyt2423/go-mitmproxy/addon"
-	"github.com/lqqyt2423/go-mitmproxy/internal/helper"
-	"github.com/lqqyt2423/go-mitmproxy/proxy"
-	"github.com/lqqyt2423/go-mitmproxy/web"
+	"github.com/Incises/go-mitmproxy/addon"
+	"github.com/Incises/go-mitmproxy/internal/helper"
+	"github.com/Incises/go-mitmproxy/proxy"
+	"github.com/Incises/go-mitmproxy/web"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -88,7 +88,7 @@ package main
 import (
 	"log"
 
-	"github.com/lqqyt2423/go-mitmproxy/proxy"
+	"github.com/Incises/go-mitmproxy/proxy"
 )
 
 func main() {
