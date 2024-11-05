@@ -8,35 +8,35 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// LogAddon log connection and flow
+// Logger - log connection and flow
 
-type LogAddon struct {
+type Logger struct {
 	proxy.BaseAddon
 }
 
-func (addon *LogAddon) ConnectionConnected(client *proxy.ClientConn) {
+func (addon *Logger) ConnectionConnected(client *proxy.ClientConn) {
 	log.Infof("%v client connected\n", client.Conn.RemoteAddr())
 }
 
-func (addon *LogAddon) ClientDisconnected(client *proxy.ClientConn) {
+func (addon *Logger) ClientDisconnected(client *proxy.ClientConn) {
 	log.Infof("%v client disconnected\n", client.Conn.RemoteAddr())
 }
 
-func (addon *LogAddon) ServerConnected(connCtx *proxy.ConnContext) {
+func (addon *Logger) ServerConnected(connCtx *proxy.ConnContext) {
 	log.Infof("%v server connected %v (%v --> %v)\n",
 		connCtx.ClientConn.Conn.RemoteAddr(),
 		connCtx.ServerConn.Address,
 		connCtx.ClientConn.Conn.LocalAddr(), connCtx.ServerConn.Conn.RemoteAddr())
 }
 
-func (addon *LogAddon) ServerDisconnected(connCtx *proxy.ConnContext) {
+func (addon *Logger) ServerDisconnected(connCtx *proxy.ConnContext) {
 	log.Infof("%v server disconnected %v (%v --> %v)\n",
 		connCtx.ClientConn.Conn.RemoteAddr(),
 		connCtx.ServerConn.Address,
 		connCtx.ClientConn.Conn.LocalAddr(), connCtx.ServerConn.Conn.RemoteAddr())
 }
 
-func (addon *LogAddon) RequestHeaders(flow *proxy.Flow) {
+func (addon *Logger) RequestHeaders(flow *proxy.Flow) {
 	start := time.Now()
 	go func() {
 		<-flow.Done()

@@ -34,7 +34,7 @@ func main() {
 	}
 
 	p.AddAddon(&RewriteHost{})
-	p.AddAddon(&addon.LogAddon{})
+	p.AddAddon(&addon.Logger{})
 
 	log.Fatal(p.Start())
 }

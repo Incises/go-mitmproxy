@@ -53,7 +53,7 @@ func main() {
 	}
 
 	p.AddAddon(&CloseConn{})
-	p.AddAddon(&addon.LogAddon{})
+	p.AddAddon(&addon.Logger{})
 
 	log.Fatal(p.Start())
 }
