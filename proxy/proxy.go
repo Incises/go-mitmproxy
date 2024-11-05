@@ -14,13 +14,13 @@ import (
 )
 
 type Options struct {
-	Debug             int
-	Addr              string
-	StreamLargeBodies int64 // 当请求或响应体大于此字节时，转为 stream 模式
-	SslInsecure       bool
-	CaRootPath        string
-	NewCaFunc         func() (cert.CA, error) //创建 Ca 的函数
-	Upstream          string
+	Debug                 int
+	Addr                  string
+	StreamLargeBodies     int64 // 当请求或响应体大于此字节时，转为 stream 模式
+	InsecureSkipTLSVerify bool
+	CaRootPath            string
+	NewCaFunc             func() (cert.CA, error) //创建 Ca 的函数
+	Upstream              string
 }
 
 type Proxy struct {
@@ -122,7 +122,7 @@ func (proxy *Proxy) getUpstreamConn(ctx context.Context, req *http.Request) (net
 	var conn net.Conn
 	address := helper.CanonicalAddr(req.URL)
 	if proxyUrl != nil {
-		conn, err = helper.GetProxyConn(ctx, proxyUrl, address, proxy.Opts.SslInsecure)
+		conn, err = helper.GetProxyConn(ctx, proxyUrl, address, proxy.Opts.InsecureSkipTLSVerify)
 	} else {
 		conn, err = (&net.Dialer{}).DialContext(ctx, "tcp", address)
 	}

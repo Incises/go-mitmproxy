@@ -17,7 +17,7 @@ import (
 
 // GetProxyConn connect proxy
 // ref: http/transport.go dialConn func
-func GetProxyConn(ctx context.Context, proxyUrl *url.URL, address string, sslInsecure bool) (net.Conn, error) {
+func GetProxyConn(ctx context.Context, proxyUrl *url.URL, address string, InsecureSkipTLSVerify bool) (net.Conn, error) {
 	var conn net.Conn
 	if proxyUrl.Scheme == "socks5" {
 		//检测socks5认证信息
@@ -50,7 +50,7 @@ func GetProxyConn(ctx context.Context, proxyUrl *url.URL, address string, sslIns
 		if proxyUrl.Scheme == "https" {
 			tlsConfig := &tls.Config{
 				ServerName:         proxyUrl.Hostname(), // 设置TLS握手的服务器名称
-				InsecureSkipVerify: sslInsecure,
+				InsecureSkipVerify: InsecureSkipTLSVerify,
 				// 可以在这里添加其他TLS配置
 			}
 			// 包装原始连接为TLS连接

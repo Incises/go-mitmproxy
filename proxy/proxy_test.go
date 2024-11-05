@@ -90,8 +90,8 @@ func (helper *testProxyHelper) init(t *testing.T) {
 
 	// start proxy
 	testProxy, err := NewProxy(&Options{
-		Addr:        helper.proxyAddr, // some random port
-		SslInsecure: true,
+		Addr:                  helper.proxyAddr, // some random port
+		InsecureSkipTLSVerify: true,
 	})
 	handleError(t, err)
 	testProxy.AddAddon(&interceptAddon{})

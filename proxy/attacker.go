@@ -59,7 +59,7 @@ func newAttacker(proxy *Proxy) (*attacker, error) {
 				ForceAttemptHTTP2:  true,
 				DisableCompression: true, // To get the original response from the server, set Transport.DisableCompression to true.
 				TLSClientConfig: &tls.Config{
-					InsecureSkipVerify: proxy.Opts.SslInsecure,
+					InsecureSkipVerify: proxy.Opts.InsecureSkipTLSVerify,
 					KeyLogWriter:       helper.GetTlsKeyLogWriter(),
 				},
 			},
@@ -203,7 +203,7 @@ func (a *attacker) serverTlsHandshake(ctx context.Context, connCtx *ConnContext)
 	serverConn := connCtx.ServerConn
 
 	serverTlsConfig := &tls.Config{
-		InsecureSkipVerify: proxy.Opts.SslInsecure,
+		InsecureSkipVerify: proxy.Opts.InsecureSkipTLSVerify,
 		KeyLogWriter:       helper.GetTlsKeyLogWriter(),
 		ServerName:         clientHello.ServerName,
 		NextProtos:         clientHello.SupportedProtos,

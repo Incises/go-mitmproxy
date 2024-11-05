@@ -51,12 +51,12 @@ func main() {
 	})
 
 	opts := &proxy.Options{
-		Debug:             config.Debug,
-		Addr:              config.Addr,
-		StreamLargeBodies: 1024 * 1024 * 5,
-		SslInsecure:       config.SslInsecure,
-		CaRootPath:        config.CertPath,
-		Upstream:          config.Upstream,
+		Debug:                 config.Debug,
+		Addr:                  config.Addr,
+		StreamLargeBodies:     1024 * 1024 * 5,
+		InsecureSkipTLSVerify: config.SslInsecure,
+		CaRootPath:            config.CertPath,
+		Upstream:              config.Upstream,
 	}
 
 	p, err := proxy.NewProxy(opts)
