@@ -14,7 +14,7 @@ type Logger struct {
 	proxy.BaseAddon
 }
 
-func (addon *Logger) ConnectionConnected(client *proxy.ClientConn) {
+func (addon *Logger) ClientConnected(client *proxy.ClientConn) {
 	log.Infof("%v client connected\n", client.Conn.RemoteAddr())
 }
 
