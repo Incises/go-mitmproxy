@@ -47,7 +47,8 @@ func main() {
 	}
 	log.SetOutput(os.Stdout)
 	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
 	})
 
 	opts := &proxy.Options{
