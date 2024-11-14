@@ -12,10 +12,10 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/tidwall/match v1.1.1
 	go.uber.org/atomic v1.11.0
-	golang.org/x/net v0.30.0
+	golang.org/x/net v0.31.0
 )
 
 require (
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 )
