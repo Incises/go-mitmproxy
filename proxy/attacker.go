@@ -15,18 +15,24 @@ import (
 	"golang.org/x/net/http2"
 )
 
+// mock net.Listener
 type attackerListener struct {
 	connChan chan net.Conn
 }
 
+// take incoming connection net.Conn as an argument,
+// and put it into connChan
 func (l *attackerListener) accept(conn net.Conn) {
 	l.connChan <- conn
 }
 
+// implement the Accept method of the net.Listener interface
+// simulate accepting a connection from the listener
 func (l *attackerListener) Accept() (net.Conn, error) {
 	c := <-l.connChan
 	return c, nil
 }
+
 func (l *attackerListener) Close() error   { return nil }
 func (l *attackerListener) Addr() net.Addr { return nil }
 
@@ -54,10 +60,11 @@ func newAttacker(proxy *Proxy) (*attacker, error) {
 		proxy: proxy,
 		ca:    ca,
 		client: &http.Client{
+			// To get the original response from the server, set Transport.DisableCompression to true.
 			Transport: &http.Transport{
 				Proxy:              proxy.realUpstreamProxy(),
 				ForceAttemptHTTP2:  true,
-				DisableCompression: true, // To get the original response from the server, set Transport.DisableCompression to true.
+				DisableCompression: true, // Ensure the response body in original compressed form as received from the server
 				TLSClientConfig: &tls.Config{
 					InsecureSkipVerify: proxy.Opts.InsecureSkipTLSVerify,
 					KeyLogWriter:       helper.GetTlsKeyLogWriter(),
@@ -73,6 +80,7 @@ func newAttacker(proxy *Proxy) (*attacker, error) {
 		},
 	}
 
+	// HTTP/1.x server
 	a.server = &http.Server{
 		Handler: a,
 		ConnContext: func(ctx context.Context, c net.Conn) context.Context {
@@ -80,6 +88,7 @@ func newAttacker(proxy *Proxy) (*attacker, error) {
 		},
 	}
 
+	// HTTP/2 server
 	a.h2Server = &http2.Server{
 		MaxConcurrentStreams: 100, // todo: wait for remote server setting
 		NewWriteScheduler:    func() http2.WriteScheduler { return http2.NewPriorityWriteScheduler(nil) },

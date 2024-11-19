@@ -48,8 +48,10 @@ func NewProxy(opts *Options) (*Proxy, error) {
 		Addons:  make([]Addon, 0),
 	}
 
+	// set up the HTTP proxy server
 	proxy.entry = newEntry(proxy)
 
+	// handle the acutual proxying of requrests and responses
 	attacker, err := newAttacker(proxy)
 	if err != nil {
 		return nil, err
