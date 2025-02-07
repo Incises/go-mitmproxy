@@ -1,24 +1,21 @@
 # go-mitmproxy
 
-[简体中文](./README_CN.md)
-
-`go-mitmproxy` is a Golang implementation of [mitmproxy](https://mitmproxy.org/) that supports man-in-the-middle attacks and parsing, monitoring, and tampering with HTTP/HTTPS traffic.
+`go-mitmproxy` is a Go-based tool similar to [mitmproxy](https://mitmproxy.org/) that enables man-in-the-middle attacks, allowing for the interception, monitoring, and modification of HTTP/HTTPS traffic.
 
 ## Key features
 
-- Parses HTTP/HTTPS traffic and displays traffic details via a [web interface](#web-interface).
-- Supports a [plugin mechanism](#adding-functionality-by-developing-plugins) for easily extending functionality. Various event hooks can be found in the [examples](./examples) directory.
-- HTTPS certificate handling is compatible with [mitmproxy](https://mitmproxy.org/) and stored in the `~/.mitmproxy` folder. If the root certificate is already trusted from a previous use of `mitmproxy`, `go-mitmproxy` can use it directly.
-- Map Remote and Map Local support.
-- HTTP/2 support.
-- Refer to the [configuration documentation](#additional-parameters) for more features.
+- Intercepts and displays HTTP/HTTPS traffic details through a [web interface](#web-interface).
+- Extensible via a [plugin mechanism](#adding-functionality-by-developing-plugins) with various event hooks available in the [examples](./examples) directory.
+- Compatible with [mitmproxy](https://mitmproxy.org/) for HTTPS certificate handling, storing certificates in the `~/.mitmproxy` folder. If a root certificate is already trusted from previous `mitmproxy` use, `go-mitmproxy` can utilize it directly.
+- Supports Map Remote and Map Local functionalities.
+- Provides HTTP/2 support.
+- Additional features can be found in the [configuration documentation](#additional-parameters).
 
 ## Unsupported features
+- Only supports manual proxy configuration on the client side; transparent proxy mode is not supported.
+- WebSocket protocol parsing is currently not supported.
 
-- Only supports setting the proxy manually in the client, not transparent proxy mode.
-- Currently does not support WebSocket protocol parsing.
-
-> For more information on the difference between manually setting a proxy and transparent proxy mode, please refer to the mitmproxy documentation for the Python version: [How mitmproxy works](https://docs.mitmproxy.org/stable/concepts-howmitmproxyworks/). go-mitmproxy currently supports "Explicit HTTP" and "Explicit HTTPS" as mentioned in the article.
+For a detailed explanation of the differences between manual proxy configuration and transparent proxy mode, please refer to the mitmproxy documentation for the Python version: [How mitmproxy works](https://docs.mitmproxy.org/stable/concepts-howmitmproxyworks/). Currently, go-mitmproxy supports "Explicit HTTP" and "Explicit HTTPS" as described in the article.
 
 ## Command Line Tool
 
@@ -29,60 +26,48 @@ go install github.com/Incises/go-mitmproxy/cmd/go-mitmproxy@latest
 ```
 
 ### Usage
-
-Use the following command to start the go-mitmproxy proxy server:
+To start the go-mitmproxy proxy server, use the following command:
 
 ```bash
 go-mitmproxy
 ```
 
-After starting, the HTTP proxy address is set to port 9080 by default, and the web interface is set to port 9081 by default.
+By default, the HTTP proxy listens on port 9080, and the web interface is accessible on port 9081.
 
-The certificate needs to be installed after the first startup to parse HTTPS traffic. The certificate will be automatically generated after the first startup command and stored in `~/.mitmproxy/mitmproxy-ca-cert.pem`. Installation steps can be found in the Python mitmproxy documentation: [About Certificates](https://docs.mitmproxy.org/stable/concepts-certificates/).
+To intercept HTTPS traffic, you need to install the generated certificate after the first startup. The certificate is automatically created and stored at `~/.mitmproxy/mitmproxy-ca-cert.pem`. For installation instructions, refer to the Python mitmproxy documentation: [About Certificates](https://docs.mitmproxy.org/stable/concepts-certificates/).
 
 ### Additional Parameters
 
-ou can use the following command to view more parameters of go-mitmproxy:
+You can use the following command to view more options for go-mitmproxy:
 
 ```bash
 go-mitmproxy -h
 ```
+### Command Line Options
 
-```txt
-Usage of go-mitmproxy:
-  -addr string
-    	proxy listen addr (default ":9080")
-  -allow_hosts value
-    	a list of allow hosts
-  -cert_path string
-    	path of generate cert files
-  -debug int
-    	debug mode: 1 - print debug log, 2 - show debug from
-  -f string
-    	Read configuration from file by passing in the file path of a JSON configuration file.
-  -ignore_hosts value
-    	a list of ignore hosts
-  -map_local string
-    	map local config filename
-  -map_remote string
-    	map remote config filename
-  -ssl_insecure
-    	not verify upstream server SSL/TLS certificates.
-  -upstream string
-    	upstream proxy
-  -upstream_cert
-    	connect to upstream server to look up certificate details (default true)
-  -version
-    	show go-mitmproxy version
-  -web_addr string
-    	web interface listen addr (default ":9081")
-```
+Here are the available command line options for `go-mitmproxy`:
 
-## Importing as a package for developing functionalities
+- `-addr [string]`: Proxy listen address (default `":9080"`).
+- `-allow_hosts [value]`: A list of allowed hosts.
+- `-cert_path [string]`: Path to generate certificate files.
+- `-debug [int]`: Debug mode: `1` - print debug log, `2` - show debug form.
+- `-f [string]`: Read configuration from a file by passing the file path of a JSON configuration file.
+- `-ignore_hosts [value]`: A list of ignored hosts.
+- `-map_local [string]`: Map local configuration filename.
+- `-map_remote [string]`: Map remote configuration filename.
+- `-ssl_insecure`: Do not verify upstream server SSL/TLS certificates.
+- `-upstream [string]`: Upstream proxy.
+- `-upstream_cert`: Connect to upstream server to look up certificate details (default `true`).
+- `-version`: Show `go-mitmproxy` version.
+- `-web_addr [string]`: Web interface listen address (default `":9081"`).
+
+## Using go-mitmproxy as a Library
+
+You can import `go-mitmproxy` as a package to develop custom functionalities. 
 
 ### Simple Example
 
-```golang
+```go
 package main
 
 import (
@@ -112,7 +97,7 @@ Refer to the [examples](./examples) for adding your own plugins by implementing 
 
 The following are the currently supported event nodes:
 
-```golang
+```go
 type Addon interface {
 	// A client has connected to mitmproxy. Note that a connection can correspond to multiple HTTP requests.
 	ClientConnected(*ClientConn)
@@ -149,25 +134,25 @@ type Addon interface {
 }
 ```
 
-## WEB Interface
+## Web Interface
 
-You can access the web interface at http://localhost:9081/ using a web browser.
+Access the web interface at http://localhost:9081/ using your web browser.
 
 ### Features
 
-- View detailed information of HTTP/HTTPS requests
-- Supports formatted preview of JSON requests/responses
-- Supports binary mode to view response body
-- Supports advanced filtering rules
-- Supports request breakpoint function
+- Detailed view of HTTP/HTTPS requests
+- Formatted preview for JSON requests/responses
+- Binary mode for viewing response bodies
+- Advanced filtering capabilities
+- Request breakpoint functionality
 
 ### Screenshot Examples
 
-![](./assets/web-1.png)
+![Web Interface Example 1](./assets/web-1.png)
 
-![](./assets/web-2.png)
+![Web Interface Example 2](./assets/web-2.png)
 
-![](./assets/web-3.png)
+![Web Interface Example 3](./assets/web-3.png)
 
 ## License
 
